@@ -6,7 +6,7 @@ import requests
 st.set_page_config(layout="centered")  # keeps the layout tight
 
 # --- Enhancement function ---
-def enhance_red_areas(img_rgb, strength=1.5, red_threshold=0.2):
+def enhance_red_areas(img_rgb, strength=1.5, red_threshold=0.02):
     img_float = img_rgb.astype(np.float32) / 255.0
     red_channel = img_float[:, :, 0]
     green_channel = img_float[:, :, 1]
