@@ -70,16 +70,30 @@ else:
 # Convert to array
 img_rgb = np.array(image)
 
-# Select depth → choose appropriate enhancement
 depth_choice = st.selectbox("🌊 Approximate Depth (meters)", [5, 10, 15, 20, 25, 30])
 
-if depth_choice <= 10:
-    enhanced_img = enhance_red_areas(img_rgb, strength=1.5, red_threshold=0.15)
-elif depth_choice <= 20:
-    enhanced_img = enhance_red_green_areas(img_rgb, red_strength=1.6, green_strength=1.2, threshold=0.12)
-else:
-    enhanced_img = enhance_rgb_areas(img_rgb, red_strength=1.7, green_strength=1.3, blue_strength=1.1, threshold=0.1)
+st.markdown("### 🎛️ Adjust enhancement strength")
 
+if depth_choice <= 10:
+    red_strength = st.slider("🔴 Red Strength", 0.5, 2.0, 1.5, 0.1)
+    enhanced_img = enhance_red_areas(img_rgb, strength=red_strength, red_threshold=0.15)
+
+elif depth_choice <= 20:
+    red_strength = st.slider("🔴 Red Strength", 0.5, 2.0, 1.6, 0.1)
+    green_strength = st.slider("🟢 Green Strength", 0.5, 2.0, 1.2, 0.1)
+    enhanced_img = enhance_red_green_areas(img_rgb, red_strength=red_strength, green_strength=green_strength, threshold=0.12)
+
+else:
+    red_strength = st.slider("🔴 Red Strength", 0.5, 2.0, 1.7, 0.1)
+    green_strength = st.slider("🟢 Green Strength", 0.5, 2.0, 1.3, 0.1)
+    blue_strength = st.slider("🔵 Blue Strength", 0.5, 2.0, 1.1, 0.1)
+    enhanced_img = enhance_rgb_areas(
+        img_rgb,
+        red_strength=red_strength,
+        green_strength=green_strength,
+        blue_strength=blue_strength,
+        threshold=0.1
+    )
 # Display both images
 tab1, tab2 = st.tabs(["🎨 Color Corrected", "📷 Original"])
 tab1.image(enhanced_img, caption="Corrected image (~{}m)".format(depth_choice))
